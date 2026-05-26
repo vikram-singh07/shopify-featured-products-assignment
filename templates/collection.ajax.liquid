@@ -1,0 +1,18 @@
+{% paginate collection.products by 20 %}
+
+  {% for product in collection.products %}
+
+    {% unless product.tags contains 'featured' %}
+
+      <div
+        class="ajax-product-card"
+        data-product-id="{{ product.id }}"
+      >
+        {% render 'custom-product-card', product: product %}
+      </div>
+
+    {% endunless %}
+
+  {% endfor %}
+
+{% endpaginate %}
