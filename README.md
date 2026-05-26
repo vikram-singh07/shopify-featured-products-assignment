@@ -290,8 +290,5 @@ https://forgeui.myshopify.com/collections/all-products
 
 ## GitHub Repository
 
-(Add GitHub URL here)
+https://github.com/vikram-singh07/shopify-featured-products-assignment.git
 
-## Test Store Access
-
-(Optional)
