@@ -22,9 +22,12 @@ export function filterJobs(jobs, profile) {
   return jobs.filter((job) => {
     const title = job.title.toLowerCase();
     if (profile.excludeTitleWords.some((w) => title.includes(w))) return false;
+    if (!profile.titleMustMatch.test(title)) return false;
     const loc = job.location.toLowerCase();
     const inCity = cities.some((c) => loc.includes(c));
-    return inCity || (profile.includeRemoteIndia && job.remote);
+    // A remote job only counts if it is open to India, not just "remote" from a US listing.
+    const remoteIndia = profile.includeRemoteIndia && job.remote && /\bindia\b/i.test(`${loc} ${job.description}`);
+    return inCity || remoteIndia;
   });
 }
 

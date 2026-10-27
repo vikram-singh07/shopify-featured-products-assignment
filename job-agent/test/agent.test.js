@@ -17,7 +17,7 @@ test('filterJobs keeps Mumbai/Jaipur and remote, drops other cities and senior t
     job(),
     job({ id: 'x:2', location: 'Jaipur, Rajasthan' }),
     job({ id: 'x:3', location: 'Bengaluru' }),
-    job({ id: 'x:4', location: 'Bengaluru', remote: true }),
+    job({ id: 'x:4', location: 'Bengaluru', remote: true, description: 'Work from home, open to candidates in India' }),
     job({ id: 'x:5', title: 'Senior Shopify Developer' }),
   ];
   assert.deepEqual(filterJobs(jobs, profile).map((j) => j.id), ['x:1', 'x:2', 'x:4']);
@@ -57,4 +57,14 @@ test('whole-word matching: JS does not match JSON', () => {
 test('a front-end junior role clears the default minimum score', () => {
   const j = job({ title: 'Junior Frontend Developer', description: 'React, JavaScript, HTML and CSS. Responsive UI.' });
   assert.ok(keywordScore(j, profile).fitScore >= settings.minScore);
+});
+
+test('drops non-developer titles and US-only remote jobs', () => {
+  const jobs = [
+    job({ id: 'a:1', title: 'Junior Revenue Cycle Representative', location: 'Mumbai, MH' }),
+    job({ id: 'a:2', title: 'Associate - Data & Analytics', location: 'Mumbai, Maharashtra' }),
+    job({ id: 'a:3', title: 'Mobile Developer', location: 'Tennessee', remote: true, description: 'Remote, US only' }),
+    job({ id: 'a:4', title: 'Mobile Developer', location: 'India', remote: true, description: 'Work from home, India' }),
+  ];
+  assert.deepEqual(filterJobs(jobs, profile).map((j) => j.id), ['a:4']);
 });
