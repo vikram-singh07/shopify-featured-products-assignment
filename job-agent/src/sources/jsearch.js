@@ -27,7 +27,7 @@ export async function fetchJSearch(profile, settings) {
 
   const jobs = [];
   for (const { query, remote } of buildJSearchQueries(profile, settings.jsearchMaxRequests)) {
-    const url = new URL(`https://${HOST}/search`);
+    const url = new URL(`https://${HOST}/search-v2`);
     url.searchParams.set('query', query);
     url.searchParams.set('page', '1');
     url.searchParams.set('num_pages', '1');
