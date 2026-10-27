@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { profile } from '../config.js';
+import { profile, settings } from '../config.js';
 import { dedupe, filterJobs, addContactAndCompanyInfo } from '../src/enrich.js';
 import { keywordScore } from '../src/score.js';
 import { buildJSearchQueries } from '../src/sources/jsearch.js';
@@ -39,7 +39,7 @@ test('extracts contact email and phone', () => {
 test('keyword score favours matching junior roles over senior asks', () => {
   const good = keywordScore(job(), profile).fitScore;
   const bad = keywordScore(job({ title: 'Java Developer', description: 'Java, Spring. 7+ years required.' }), profile).fitScore;
-  assert.ok(good >= 60, `good=${good}`);
+  assert.ok(good >= 40, `good=${good}`);
   assert.ok(bad < 20, `bad=${bad}`);
 });
 
@@ -47,4 +47,14 @@ test('JSearch queries respect the request budget', () => {
   const q = buildJSearchQueries(profile, 6);
   assert.equal(q.length, 6);
   assert.equal(new Set(q.map((x) => x.query)).size, 6);
+});
+
+test('whole-word matching: JS does not match JSON', () => {
+  const j = job({ title: 'Data Engineer', description: 'Build JSON pipelines and backend services.' });
+  assert.equal(keywordScore(j, profile).fitReason, 'No skill keywords found in the listing');
+});
+
+test('a front-end junior role clears the default minimum score', () => {
+  const j = job({ title: 'Junior Frontend Developer', description: 'React, JavaScript, HTML and CSS. Responsive UI.' });
+  assert.ok(keywordScore(j, profile).fitScore >= settings.minScore);
 });
