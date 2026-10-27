@@ -33,6 +33,9 @@ export const profile = {
   cities: ['Mumbai', 'Jaipur'],
   includeRemoteIndia: true,
 
+  // A job title must match this, so non-developer roles are dropped.
+  titleMustMatch: /developer|engineer|programmer/i,
+
   // Titles containing these words are dropped (too senior for 1-3 years).
   excludeTitleWords: ['senior', 'sr.', 'sr ', 'lead', 'principal', 'architect', 'manager', 'head of', 'director', 'staff'],
 };
