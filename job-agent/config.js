@@ -5,9 +5,14 @@ export const profile = {
 
   // Skills used to score each job (keyword scoring, and context for Claude).
   skills: [
-    'Shopify', 'Liquid', 'Shopify theme', 'Dawn', 'JavaScript', 'React', 'Next.js',
-    'HTML', 'CSS', 'Tailwind', 'Node.js', 'REST API', 'GraphQL', 'Git', 'responsive design',
+    'Shopify', 'Liquid', 'Shopify theme', 'Dawn', 'Shopify app', 'storefront', 'e-commerce', 'ecommerce',
+    'JavaScript', 'JS', 'TypeScript', 'React', 'Next.js', 'Redux', 'Vue', 'Angular',
+    'HTML', 'CSS', 'SCSS', 'Tailwind', 'Bootstrap', 'responsive design', 'UI', 'front end', 'frontend',
+    'Node.js', 'REST API', 'GraphQL', 'AJAX', 'Git', 'full stack', 'fullstack', 'web application',
   ],
+
+  // Words that make a title a web/front-end role (adds to the score).
+  titleKeywords: ['web', 'frontend', 'front end', 'front-end', 'react', 'shopify', 'javascript', 'full stack', 'fullstack', 'ui'],
 
   // Short summary Claude reads when scoring jobs and writing cover notes.
   summary:
@@ -40,7 +45,7 @@ export const settings = {
   adzunaMaxDaysOld: Number(process.env.ADZUNA_MAX_DAYS_OLD || 1),
 
   // Jobs below this score are not written to the sheet.
-  minScore: Number(process.env.MIN_SCORE || 40),
+  minScore: Number(process.env.MIN_SCORE || 25),
 
   claudeModel: process.env.CLAUDE_MODEL || 'claude-opus-5-5',
   sheetTab: process.env.GOOGLE_SHEET_TAB || 'Jobs',

@@ -96,15 +96,23 @@ async function scoreBatchWithClaude(client, batch, profile, settings) {
   });
 }
 
+// Whole-word match, so "JS" doesn't match "JSON" and "UI" doesn't match "build".
+const hasWord = (text, word) => {
+  const escaped = word.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`(^|[^a-z0-9])${escaped}($|[^a-z0-9])`).test(text);
+};
+
 export function keywordScore(job, profile) {
   const text = `${job.title} ${job.description}`.toLowerCase();
   const title = job.title.toLowerCase();
-  const matched = profile.skills.filter((s) => text.includes(s.toLowerCase()));
+  const matched = profile.skills.filter((s) => hasWord(text, s));
   const roleHit = profile.roles.some((r) => title.includes(r.toLowerCase().replace(/ developer$/, '')));
+  const titleHit = (profile.titleKeywords ?? []).some((k) => hasWord(title, k));
 
-  let score = Math.min(60, matched.length * 10);
+  let score = Math.min(60, matched.length * 8);
   if (roleHit) score += 25;
-  if (/\b(junior|fresher|associate|entry|trainee)\b/.test(title)) score += 10;
+  else if (titleHit) score += 15;
+  if (/\b(junior|fresher|associate|entry|trainee|graduate)\b/.test(title)) score += 10;
   const years = text.match(/(\d+)\s*\+?\s*(?:-\s*\d+\s*)?years?/);
   if (years && Number(years[1]) >= 5) score -= 30;
 
