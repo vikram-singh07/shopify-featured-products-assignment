@@ -41,11 +41,11 @@ export async function fetchJSearch(profile, settings) {
       continue;
     }
     const body = await res.json();
-    if (!Array.isArray(body.data)) {
+    const data = body.data?.jobs;
+    if (!Array.isArray(data)) {
       console.warn(`[jsearch] "${query}" returned no job list: ${JSON.stringify(body).slice(0, 300)}`);
       continue;
     }
-    const data = body.data;
     console.log(`[jsearch] "${query}" -> ${data.length} jobs`);
     for (const j of data) jobs.push(normalize(j));
   }
